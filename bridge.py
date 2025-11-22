@@ -1,4 +1,5 @@
 """CLI bridge for SmartGen Cloud Plus."""
+import argparse
 import json
 from pathlib import Path
 
@@ -20,11 +21,21 @@ def load_config(config_path: Path) -> SmartGenConfig:
 
 
 def main() -> None:
-    config_path = Path("config.yaml")
-    if not config_path.exists():
-        raise FileNotFoundError("config.yaml not found. Please create it before running the bridge.")
+    parser = argparse.ArgumentParser(description="SmartGen Cloud Plus bridge")
+    parser.add_argument(
+        "--config",
+        type=Path,
+        default=Path("config.yaml"),
+        help="Path to YAML configuration file (default: config.yaml)",
+    )
+    args = parser.parse_args()
 
-    config = load_config(config_path)
+    if not args.config.exists():
+        raise FileNotFoundError(
+            f"Config file {args.config} not found. Please create it before running the bridge."
+        )
+
+    config = load_config(args.config)
     client = SmartGenClient(config)
 
     login_response = client.login()

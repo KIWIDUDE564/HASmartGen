@@ -8,6 +8,7 @@ A clean Python bridge for SmartGen Cloud Plus. It logs in with SM4-encrypted pay
 - Login and token handling for SmartGen Cloud Plus
 - Convenience methods for `get_status` and `get_monitor_list`
 - CLI bridge script that prints JSON responses in a readable format
+- Home Assistant add-on scaffolding for deployment through the Supervisor
 
 ## Requirements
 - Python 3.10+
@@ -32,11 +33,18 @@ timezone: "America/Anchorage"
 ```
 
 ## How to run
-1. Ensure `config.yaml` is populated.
+1. Ensure `config.yaml` is populated or point to a custom file via `--config`.
 2. Run the bridge:
    ```bash
-   python bridge.py
+   python bridge.py --config config.yaml
    ```
+
+## Home Assistant add-on
+The `homeassistant-addon/` directory provides a Supervisor add-on definition so you can run the bridge directly inside Home Assistant.
+
+1. Add this repository (or a repo containing `homeassistant-addon/`) as a custom repository in **Settings → Add-ons → Add-on store → ⋮ → Repositories**.
+2. Open the **SmartGen Cloud Bridge** add-on, set the options (`username`, `password`, `company_id`, optional `language`, `timezone`), and click **Start**.
+3. The add-on writes these options to `/data/config.yaml` and runs `bridge.py`; monitor output in the add-on logs.
 
 ## Example output
 ```
